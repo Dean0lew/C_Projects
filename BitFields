@@ -1,0 +1,64 @@
+#include<iostream>
+#include<string>
+using namespace std;
+
+int first;
+int second;
+int third;
+int fourth;
+int x;
+
+struct octet { //create struct and designate 8 bits to each octet
+	unsigned int oct1 : 8;
+	unsigned int oct2 : 8;
+	unsigned int oct3 : 8;
+	unsigned int oct4 : 8;
+}; octet a;
+
+struct halves {
+	unsigned int half1 : 16;
+	unsigned int half2 : 16;
+}; halves h;
+
+union fourths {
+	octet quarter;
+	halves half;
+	unsigned int whole : 32;
+}; fourths b;
+
+
+int main() {
+	int choice;
+	cout << "Enter an IP address: \n"; //prompt user input for an IP address
+
+	cin >> first; //store value for first octet in first variable
+	cin >> second;
+	cin >> third;
+	cin >> fourth;
+
+	//store values for variables for union fourths
+	b.quarter.oct1 = fourth;
+	b.quarter.oct2 = third;
+	b.quarter.oct3 = second;
+	b.quarter.oct4 = first;
+
+
+
+	cout << "How would you like to see your IP address ((1) single value, (2) four values, (3), two values, (4) a single bit value:";
+	cin >> choice;
+	if (choice == 1) {
+		cout << b.whole;
+	}
+	else if (choice == 2) {
+		cout << first << "."; cout << second << "."; cout << third << "."; cout << fourth;
+	}
+	else if (choice == 3) {
+		cout << b.half.half2; cout << ", "; cout << b.half.half1;
+	}
+	else if (choice == 4) {
+		cout << "Which bit would you like to see: ";
+		cin >> x;
+		int bit = (b.whole << (32 - x)) >> 31;
+		cout << bit;
+	}
+}
